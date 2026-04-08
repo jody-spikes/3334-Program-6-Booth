@@ -129,11 +129,14 @@ static bool isPrime(size_t n) {
       return true;
   }
 
-    static size_t nextPrime(size_t n) {
-        if(n < 2) return 2;
-        
-        while(!isPrime(n)){
-            ++n;
-        }
-        return n;
+//----------
+//Next Prime
+//----------
+static size_t nextPrime(size_t n) {
+    if(n < 2) return 2;
+
+    while(!isPrime(n)){
+        ++n;
     }
+    return n;
+}
