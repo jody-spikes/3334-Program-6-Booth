@@ -112,17 +112,22 @@ size_t HashTable<Key, Value>::findEntryPosition
 //
 //    void insertWithoutStats(const Key& key, const Value& value) {}
 //
-    static bool isPrime(size_t n) {
-          if(n < 2)      return false;
-          if(n == 2)     return true;
-          if(n % 2 == 0) return false;
-          
-          for(size_t i = 3; i * i <= n; i += 2){
-              if(n % i == 0) return false;
-          }
-          
-          return true;
+
+//--------
+//Is Prime
+//--------
+template <typename Key, typename Value>
+static bool isPrime(size_t n) {
+      if(n < 2)      return false;
+      if(n == 2)     return true;
+      if(n % 2 == 0) return false;
+
+      for(size_t i = 3; i * i <= n; i += 2){
+          if(n % i == 0) return false;
       }
+
+      return true;
+  }
 
     static size_t nextPrime(size_t n) {
         if(n < 2) return 2;
