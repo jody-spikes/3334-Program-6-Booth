@@ -163,7 +163,8 @@ bool HashTable<Key, Value>::isPrime(size_t n) {
 //----------
 //Next Prime
 //----------
-static size_t nextPrime(size_t n) {
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::nextPrime(size_t n) {
     if(n < 2) return 2;
 
     while(!isPrime(n)){
