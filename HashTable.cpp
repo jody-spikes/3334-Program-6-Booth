@@ -148,7 +148,7 @@ size_t HashTable<Key, Value>::findEntryPosition
 //Is Prime
 //--------
 template <typename Key, typename Value>
-static bool isPrime(size_t n) {
+bool HashTable<Key, Value>::isPrime(size_t n) {
       if(n < 2)      return false;
       if(n == 2)     return true;
       if(n % 2 == 0) return false;
