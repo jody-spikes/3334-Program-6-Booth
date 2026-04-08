@@ -90,10 +90,10 @@ Value* HashTable<Key, Value>::find(const Key& key) {
 //------------
 //Bucket Index
 //------------
-    template <typename Key, typename Value>
-    size_t HashTable<Key, Value>::bucketIndex(const Key& key) const {
-        return hash<Key>{}(key) % buckets_.size();
-    }
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::bucketIndex(const Key& key) const {
+    return hash<Key>{}(key) % buckets_.size();
+}
 
 //-------------------
 //Find Entry Position
