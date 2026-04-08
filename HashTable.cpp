@@ -7,6 +7,10 @@
 
 #include <stdio.h>
 #include "HashTable.h"
+
+//------
+//Insert
+//------
 template <typename Key, typename Value>
 bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
     if(loadFactor() >= maxLoadFactor_){
@@ -31,8 +35,15 @@ bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
     return true;
     
 }
-//
-//    bool contains(const Key& key) const {}
+
+//--------
+//Contains
+//--------
+    template <typename Key, typename Value>
+    bool HashTable<Key, Value>::contains(const Key& key) const {
+        size_t idx = bucketIndex(key);
+        return findEntryPosition(idx, key) != buckets_[idx].size();
+    }
 //
 //    bool remove(const Key& key) {}
 //
@@ -64,7 +75,10 @@ bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
 //    size_t collisionCount_;
 //    size_t rehashCount_;
 //    double maxLoadFactor_;
-//
+
+//------------
+//Bucket Index
+//------------
     template <typename Key, typename Value>
     size_t HashTable<Key, Value>::bucketIndex(const Key& key) const {
         return hash<Key>{}(key) % buckets_.size();
