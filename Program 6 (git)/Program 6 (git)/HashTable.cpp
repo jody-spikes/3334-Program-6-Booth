@@ -156,9 +156,18 @@ size_t HashTable<Key, Value>::findEntryPosition
     }
     return chain.size();
 }
-//
-//    void insertWithoutStats(const Key& key, const Value& value) {}
-//
+
+//--------------------
+//Insert Without Stats
+//--------------------
+template <typename Key, typename Value>
+void HashTable<Key, Value>::insertWithoutStats
+ (const Key& key, const Value& value) {
+    size_t idx = bucketIndex(key);
+    buckets_[idx].emplace_back(key, value);
+    ++elementCount_;
+}
+
 
 //--------
 //Is Prime
