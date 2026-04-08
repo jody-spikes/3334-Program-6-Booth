@@ -112,8 +112,24 @@ const Value& HashTable<Key, Value>::at(const Key& key) const {
     }
     return *val;
 }
-//
-//    void rehash() {}
+
+//------
+//Rehash
+//------
+template <typename Key, typename Value>
+void HashTable<Key, Value>::rehash() {
+    size_t newCap = nextPrime(buckets_.size() * 2);
+    vector<vector<Entry>> temp = move(buckets_);
+    buckets_.assign(newCap, {});
+    elementCount_ = 0;
+    rehashCount_++;
+    
+    for(auto& bucket : temp){
+        for(auto& entry : bucket){
+            insertWithoutStats(entry.key, entry.value);
+        }
+    }
+}
 //
 //    size_t size() const {}
 //
