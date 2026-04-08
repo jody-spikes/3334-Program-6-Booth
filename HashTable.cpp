@@ -59,12 +59,43 @@ Value* HashTable<Key, Value>::find(const Key& key) {
     }
     return &buckets_[idx][pos].value;
 }
-//
-//    const Value* find(const Key& key) const {}
-//
-//    Value& at(const Key& key) {}
-//
-//    const Value& at(const Key& key) const {}
+
+//----------------
+//Find (const)
+//----------------
+template <typename Key, typename Value>
+const Value* HashTable<Key, Value>::find(const Key& key) const {
+    size_t idx = bucketIndex(key);
+    size_t pos = findEntryPosition(idx, key);
+    if(pos == buckets_[idx].size()) {
+        return nullptr;
+    }
+    return &buckets_[idx][pos].value;
+}
+
+//-------------
+//at (not const)
+//-------------
+template <typename Key, typename Value>
+Value& HashTable<Key, Value>::at(const Key& key) {
+    Value* val = find(key);
+    if (!val) {
+        throw out_of_range("Key not found");
+    }
+    return *val;
+}
+
+//-------------
+//at (const)
+//-------------
+template <typename Key, typename Value>
+const Value& HashTable<Key, Value>::at(const Key& key) const {
+    const Value* val = find(key);
+    if (!val) {
+        throw out_of_range("Key not found");
+    }
+    return *val;
+}
 //
 //    void rehash() {}
 //
