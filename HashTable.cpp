@@ -95,18 +95,20 @@ Value* HashTable<Key, Value>::find(const Key& key) {
         return hash<Key>{}(key) % buckets_.size();
     }
 
-
-    template <typename Key, typename Value>
-    size_t HashTable<Key, Value>::findEntryPosition
-    (size_t bucket, const Key& key) const {
-        const auto& chain = buckets_[bucket];
-        for(size_t i = 0; i < chain.size(); i++){
-            if(chain[i].key == key){
-                return i;
-            }
+//-------------------
+//Find Entry Position
+//-------------------
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::findEntryPosition
+(size_t bucket, const Key& key) const {
+    const auto& chain = buckets_[bucket];
+    for(size_t i = 0; i < chain.size(); i++){
+        if(chain[i].key == key){
+            return i;
         }
-        return chain.size();
     }
+    return chain.size();
+}
 //
 //    void insertWithoutStats(const Key& key, const Value& value) {}
 //
