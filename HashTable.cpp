@@ -46,8 +46,19 @@ bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
     }
 //
 //    bool remove(const Key& key) {}
-//
-//    Value* find(const Key& key) {}
+
+//----------------
+//Find (not const)
+//----------------
+template <typename Key, typename Value>
+Value* HashTable<Key, Value>::find(const Key& key) {
+    size_t idx = bucketIndex(key);
+    size_t pos = findEntryPosition(idx, key);
+    if(pos == buckets_[idx].size()) {
+        return nullptr;
+    }
+    return &buckets_[idx][pos].value;
+}
 //
 //    const Value* find(const Key& key) const {}
 //
