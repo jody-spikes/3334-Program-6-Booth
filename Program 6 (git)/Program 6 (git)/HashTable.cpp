@@ -1,11 +1,10 @@
 //
-//  HashTable.cpp
+//  HashTable.tpp
 //  Program 6
 //
 //  Created by Jody Spikes on 3/17/26.
 //
 
-#include <stdio.h>
 #include "HashTable.h"
 
 //------
@@ -18,12 +17,11 @@ bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
     }
     
     size_t idx = bucketIndex(key);
-    
     size_t pos = findEntryPosition(idx, key);
     
     if(pos != buckets_[idx].size()){
         buckets_[idx][pos].value = value;
-        return false; //no key update
+        return false;
     }
     
     if(!buckets_[idx].empty()){
@@ -33,17 +31,16 @@ bool HashTable<Key, Value>::insert(const Key& key, const Value& value) {
     buckets_[idx].emplace_back(key, value);
     ++elementCount_;
     return true;
-    
 }
 
 //--------
 //Contains
 //--------
-    template <typename Key, typename Value>
-    bool HashTable<Key, Value>::contains(const Key& key) const {
-        size_t idx = bucketIndex(key);
-        return findEntryPosition(idx, key) != buckets_[idx].size();
-    }
+template <typename Key, typename Value>
+bool HashTable<Key, Value>::contains(const Key& key) const {
+    size_t idx = bucketIndex(key);
+    return findEntryPosition(idx, key) != buckets_[idx].size();
+}
 
 //------
 //Remove
@@ -70,20 +67,20 @@ template <typename Key, typename Value>
 Value* HashTable<Key, Value>::find(const Key& key) {
     size_t idx = bucketIndex(key);
     size_t pos = findEntryPosition(idx, key);
-    if(pos == buckets_[idx].size()) {
+    if(pos == buckets_[idx].size()){
         return nullptr;
     }
     return &buckets_[idx][pos].value;
 }
 
-//----------------
+//------------
 //Find (const)
-//----------------
+//------------
 template <typename Key, typename Value>
 const Value* HashTable<Key, Value>::find(const Key& key) const {
     size_t idx = bucketIndex(key);
     size_t pos = findEntryPosition(idx, key);
-    if(pos == buckets_[idx].size()) {
+    if(pos == buckets_[idx].size()){
         return nullptr;
     }
     return &buckets_[idx][pos].value;
@@ -95,19 +92,19 @@ const Value* HashTable<Key, Value>::find(const Key& key) const {
 template <typename Key, typename Value>
 Value& HashTable<Key, Value>::at(const Key& key) {
     Value* val = find(key);
-    if (!val) {
+    if(!val){
         throw out_of_range("Key not found");
     }
     return *val;
 }
 
-//-------------
+//----------
 //at (const)
-//-------------
+//----------
 template <typename Key, typename Value>
 const Value& HashTable<Key, Value>::at(const Key& key) const {
     const Value* val = find(key);
-    if (!val) {
+    if(!val){
         throw out_of_range("Key not found");
     }
     return *val;
@@ -130,25 +127,43 @@ void HashTable<Key, Value>::rehash() {
         }
     }
 }
-//
-//    size_t size() const {}
-//
-//    size_t tableSize() const {}
-//
-//    double loadFactor() const {}
-//
-//    size_t collisionCount() const {}
-//
-//    size_t rehashCount() const {}
-//
-//    vector<Key> keys() const {}
-//
-//private:
-//    vector<vector<Entry> > buckets_;
-//    size_t elementCount_;
-//    size_t collisionCount_;
-//    size_t rehashCount_;
-//    double maxLoadFactor_;
+
+//---------
+//Returners
+//---------
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::size() const {
+    return elementCount_;
+}
+
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::tableSize() const {
+    return buckets_.size();
+}
+
+template <typename Key, typename Value>
+double HashTable<Key, Value>::loadFactor() const {
+    return static_cast<double>(elementCount_) / buckets_.size();
+}
+
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::collisionCount() const {
+    return collisionCount_;
+}
+
+template <typename Key, typename Value>
+size_t HashTable<Key, Value>::rehashCount() const {
+    return rehashCount_;
+}
+
+template <typename Key, typename Value>
+vector<Key> HashTable<Key, Value>::keys() const {
+    vector<Key> result;
+    for(auto& bucket : buckets_)
+        for(auto& entry : bucket)
+            result.push_back(entry.key);
+    return result;
+}
 
 //------------
 //Bucket Index
@@ -162,8 +177,7 @@ size_t HashTable<Key, Value>::bucketIndex(const Key& key) const {
 //Find Entry Position
 //-------------------
 template <typename Key, typename Value>
-size_t HashTable<Key, Value>::findEntryPosition
-(size_t bucket, const Key& key) const {
+size_t HashTable<Key, Value>::findEntryPosition(size_t bucket, const Key& key) const {
     const auto& chain = buckets_[bucket];
     for(size_t i = 0; i < chain.size(); i++){
         if(chain[i].key == key){
@@ -177,29 +191,25 @@ size_t HashTable<Key, Value>::findEntryPosition
 //Insert Without Stats
 //--------------------
 template <typename Key, typename Value>
-void HashTable<Key, Value>::insertWithoutStats
- (const Key& key, const Value& value) {
+void HashTable<Key, Value>::insertWithoutStats(const Key& key, const Value& value) {
     size_t idx = bucketIndex(key);
     buckets_[idx].emplace_back(key, value);
     ++elementCount_;
 }
-
 
 //--------
 //Is Prime
 //--------
 template <typename Key, typename Value>
 bool HashTable<Key, Value>::isPrime(size_t n) {
-      if(n < 2)      return false;
-      if(n == 2)     return true;
-      if(n % 2 == 0) return false;
-
-      for(size_t i = 3; i * i <= n; i += 2){
-          if(n % i == 0) return false;
-      }
-
-      return true;
-  }
+    if(n < 2)       return false;
+    if(n == 2)      return true;
+    if(n % 2 == 0)  return false;
+    for(size_t i = 3; i * i <= n; i += 2){
+        if(n % i == 0) return false;
+    }
+    return true;
+}
 
 //----------
 //Next Prime
@@ -207,7 +217,6 @@ bool HashTable<Key, Value>::isPrime(size_t n) {
 template <typename Key, typename Value>
 size_t HashTable<Key, Value>::nextPrime(size_t n) {
     if(n < 2) return 2;
-
     while(!isPrime(n)){
         ++n;
     }
